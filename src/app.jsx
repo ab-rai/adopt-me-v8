@@ -3,19 +3,31 @@ import { createRoot } from "react-dom/client";
 import SearchParams from "./SearchParams";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Details from "./Details";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+      cacheTime: Infinity,
+    },
+  },
+});
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <header>
-        <Link to={"/"}>Adopt Me!</Link>
-      </header>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <header>
+          <Link to={"/"}>Adopt Me!</Link>
+        </header>
 
-      <Routes>
-        <Route path="/details/:id" element={<Details />}></Route>
-        <Route path="/" element={<SearchParams />}></Route>
-      </Routes>
-    </BrowserRouter>
+        <Routes>
+          <Route path="/details/:id" element={<Details />}></Route>
+          <Route path="/" element={<SearchParams />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 const container = document.getElementById("root");
